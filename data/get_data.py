@@ -11,7 +11,7 @@ def daily_data(filename=None):
     '''
     Get the data from Health Department of Mexico Federal Government
     '''
-    print('Requesting data to shitty API of datos abiertos Mexico')
+    print('Requesting data to datos abiertos Mexico')
     r = requests.get(DAILY_COVID_URL)
     #Check if the request went through :0
     assert r.ok
@@ -40,6 +40,8 @@ def daily_data(filename=None):
             (df[col] == 97)), np.nan, df[col])
     #Save csv in directory if requested
     if filename:
+        if os.path.exists(filename):
+            os.remove(filename)
         df.to_csv(filename)
     return df
 
