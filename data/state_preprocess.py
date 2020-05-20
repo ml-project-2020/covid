@@ -1,6 +1,7 @@
 #Module to pre process individual level data into state level data
 import pandas as pd
 import get_data
+import numpy as np
 
 def convert_to_state_date():
     '''
@@ -31,21 +32,16 @@ def convert_to_state_date():
     positive_cases.rename(columns = {'resultado':'casos_positivos'}, 
                           inplace=True)
 
-    #change fecha_df to 0 or 1 if patient dies 1 == death
-    positive_cases.loc[positive_cases['fecha_def'].isnull(),'fecha_def'] = 0
-    positive_cases.loc[positive_cases['fecha_def'] != 0,'fecha_def'] = 1
+    #Add death dummy if patient dies 1 == death
+    #positive_cases['muerte'] = np.where(positive_cases['fecha_def'].isnull(), 0,1)
+    
     #Change hospitalized, 1 if hospitalized 0 if sent home
     positive_cases.loc[positive_cases['tipo_paciente'] == 1,'tipo_paciente'] = 0
     positive_cases.loc[positive_cases['tipo_paciente'] == 2,'tipo_paciente'] = 1
     positive_cases.rename(columns = {'tipo_paciente':'hospitalizado'},
                           inplace=True)
-
-    positive_cases.loc[positive_cases['fecha_def'].isnull(),'fecha_def'] = 0
-    positive_cases.loc[positive_cases['fecha_def'] != 0,'fecha_def'] = 1
-    positive_cases.rename(columns = {'fecha_def':'muerte'}, inplace=True)
-
-    #bin age column
-    binss = [0,10,20,30,40,50,60,70,80,90,100,114]
+    #Bins age column
+    binss = [i for i in range(0, 121, 10)]
     positive_cases.loc[:, 'edad'] = pd.cut(positive_cases.edad, binss)
     by_age = positive_cases.groupby(['entidad_um', 'fecha_ingreso', 'edad'])\
              ['casos_positivos'].sum().reset_index()
@@ -57,7 +53,7 @@ def convert_to_state_date():
     by_age.reset_index(inplace=True)
 
     to_keep = ['fecha_ingreso','entidad_um', 'casos_positivos','hospitalizado', 
-               'muerte', 'intubado','neumonia', 'edad', 
+               'muerte', 'intubado','neumonia', 'edad',
                'habla_lengua_indig', 'diabetes', 'epoc', 'asma', 'inmusupr', 
                'hipertension', 'otra_com','cardiovascular', 'obesidad', 
                'renal_cronica', 'tabaquismo','otro_caso', 'uci']

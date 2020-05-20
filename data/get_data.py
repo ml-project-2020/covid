@@ -4,12 +4,13 @@ from zipfile import ZipFile
 import pandas as pd
 import os
 import numpy as np
+import datetime as dt
 
 DAILY_COVID_URL = 'http://187.191.75.115/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip'
 
 def daily_data(filename=None):
     '''
-    Get the data from Health Department of Mexico Federal Government
+    Get the data from Health Department of the Mexico Federal Government
     '''
     print('Requesting data to datos abiertos Mexico')
     r = requests.get(DAILY_COVID_URL)
@@ -38,6 +39,16 @@ def daily_data(filename=None):
         else:
             df[col] = np.where(((df[col] == 99) | (df[col] == 98) | \
             (df[col] == 97)), np.nan, df[col])
+    #Create dummy death variable
+    df['muerte'] == np.where(df['fecha_def'].isnull(), 0,1)
+    
+    #Create estimated recovery dummy and recovery date
+    df['recovered'] = np.where((df.fecha_ingreso + pd.DateOffset(days=30) < str(dt.date.today())) & \
+                              (df.death == 0),\
+         1,0)
+    df['fecha_rec'] = df.fecha_ingreso + pd.DateOffset(30)
+    df.loc[df.recovered == 0, 'fecha_rec'] = np.nan
+
     #Save csv in directory if requested
     if filename:
         if os.path.exists(filename):
@@ -48,5 +59,3 @@ def daily_data(filename=None):
 
 if __name__ == "__main__":
     daily_data('daily_covid.csv')
-
-
