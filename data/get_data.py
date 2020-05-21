@@ -40,8 +40,8 @@ def daily_data(filename=None):
             df[col] = np.where(((df[col] == 99) | (df[col] == 98) | \
             (df[col] == 97)), np.nan, df[col])
     #Create dummy death variable
-    df['muerte'] == np.where(df['fecha_def'].isnull(), 0,1)
-    
+    df['death'] = np.where(df['fecha_def'].isnull(), 0,1)
+
     #Create estimated recovery dummy and recovery date
     df['recovered'] = np.where((df.fecha_ingreso + pd.DateOffset(days=30) < str(dt.date.today())) & \
                               (df.death == 0),\
