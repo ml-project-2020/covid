@@ -25,8 +25,8 @@ def daily_data(filename=None):
     df = pd.read_csv(data_name, engine='python')
     print('Raw data deleted. If you specified filename, clean data will be saved in data directory')
     os.remove(data_name)
-    #Clean data
-
+    
+    #Clean data Part
     df.columns = map(str.lower, df.columns)
     df['pais_origen'] = np.where(df['pais_origen'] == '99', np.nan, df['pais_origen'])
 
@@ -35,7 +35,7 @@ def daily_data(filename=None):
     data_cols = ['fecha_actualizacion', 'fecha_ingreso', 'fecha_def', 'fecha_sintomas']
     for col in data_cols:
         df[col] = pd.to_datetime(df[col])
-    
+
     #Modify dummies for health conditions variables
     binary_cols = ['intubado', 'neumonia','embarazo', 'habla_lengua_indig', 
                    'diabetes','epoc', 'asma', 'inmusupr', 'hipertension',
@@ -53,7 +53,6 @@ def daily_data(filename=None):
     df.rename(columns = {'tipo_paciente':'hospitalizado'},
                           inplace=True)
 
-    
     #Create estimated recovery dummy and recovery date
     df['recovered'] = np.where((df.fecha_ingreso + pd.DateOffset(days=30) < str(dt.date.today())) & \
                                (df.muertos == 0),\
@@ -67,7 +66,6 @@ def daily_data(filename=None):
              os.remove(filename)
          df.to_csv(filename)
     return df
-
 
 if __name__ == "__main__":
     daily_data('daily_covid.csv')
