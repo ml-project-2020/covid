@@ -62,7 +62,7 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
     by_age.reset_index(inplace=True)
 
     to_keep = ['fecha_ingreso','entidad_um', 'casos_positivos','hospitalizado', 
-               'muerte', 'intubado','neumonia', 'edad',
+               'muertos', 'intubado','neumonia', 'edad',
                'habla_lengua_indig', 'diabetes', 'epoc', 'asma', 'inmusupr', 
                'hipertension', 'otra_com','cardiovascular', 'obesidad', 
                'renal_cronica', 'tabaquismo','otro_caso', 'uci']
