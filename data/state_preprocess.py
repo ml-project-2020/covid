@@ -30,25 +30,11 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
                        list(zip(state_codes.ENTIDAD_FEDERATIVA, 
                        state_codes.ABREVIATURA))))
 
-    binary_cols = ['intubado', 'neumonia','embarazo', 'habla_lengua_indig', 
-                   'diabetes','epoc', 'asma', 'inmusupr', 'hipertension',
-                   'otra_com', 'cardiovascular', 'obesidad', 'renal_cronica', 
-                   'tabaquismo', 'otro_caso', 'uci']
+    #Subset positive cases
     positive_cases = covid_df.loc[covid_df['resultado']==1, :]
-    rep_pos = positive_cases[binary_cols].replace({2:0, 2.0:0, 99: np.nan})
-    positive_cases.loc[:, binary_cols] = rep_pos
     positive_cases.rename(columns = {'resultado':'casos_positivos'}, 
                           inplace=True)
 
-    #Add death dummy if patient dies 1 == death
-    positive_cases.loc[:,'muertos']=np.where(positive_cases['fecha_def'].isnull()
-                                            ,0,1)
-
-    #Change hospitalized, 1 if hospitalized 0 if sent home
-    positive_cases.loc[positive_cases['tipo_paciente'] == 1,'tipo_paciente'] = 0
-    positive_cases.loc[positive_cases['tipo_paciente'] == 2,'tipo_paciente'] = 1
-    positive_cases.rename(columns = {'tipo_paciente':'hospitalizado'},
-                          inplace=True)
     #Bins age column
     binss = [i for i in range(0, 121, 10)]
     positive_cases.loc[:, 'edad'] = pd.cut(positive_cases.edad, binss)
@@ -66,6 +52,7 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
                'habla_lengua_indig', 'diabetes', 'epoc', 'asma', 'inmusupr', 
                'hipertension', 'otra_com','cardiovascular', 'obesidad', 
                'renal_cronica', 'tabaquismo','otro_caso', 'uci']
+
     positive_cases = positive_cases.loc[:, to_keep]
 
     by_state_date = positive_cases.groupby(['entidad_um', 'fecha_ingreso'])\

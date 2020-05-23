@@ -26,34 +26,46 @@ def daily_data(filename=None):
     print('Raw data deleted. If you specified filename, clean data will be saved in data directory')
     os.remove(data_name)
     #Clean data
-    df.columns = map(str.lower, df.columns)
-    df.fecha_def = np.where(df.fecha_def == '9999-99-99', np.nan, df.fecha_def)
-    for col in ['fecha_ingreso', 'fecha_actualizacion', 'fecha_def', 'fecha_sintomas']:
-        df[col] = pd.to_datetime(df[col])
-    cols_99 = ['intubado', 'neumonia', 'epoc', 'asma', 'inmusupr','hipertension', 'otra_com',\
-         'cardiovascular', 'obesidad', 'renal_cronica', 'tabaquismo', 'otro_caso', 'migrante', \
-             'pais_origen', 'uci']
-    for col in cols_99:
-        if col == 'pais_origen':
-            df[col] = np.where(df[col] == '99', np.nan, df[col])
-        else:
-            df[col] = np.where(((df[col] == 99) | (df[col] == 98) | \
-            (df[col] == 97)), np.nan, df[col])
-    #Create dummy death variable
-    df['death'] = np.where(df['fecha_def'].isnull(), 0,1)
 
+    df.columns = map(str.lower, df.columns)
+    df['pais_origen'] = np.where(df['pais_origen'] == '99', np.nan, df['pais_origen'])
+
+    #Change date columns to date type
+    df.fecha_def = np.where(df.fecha_def == '9999-99-99', np.nan, df.fecha_def)
+    data_cols = ['fecha_actualizacion', 'fecha_ingreso', 'fecha_def', 'fecha_sintomas']
+    for col in data_cols:
+        df[col] = pd.to_datetime(df[col])
+    
+    #Modify dummies for health conditions variables
+    binary_cols = ['intubado', 'neumonia','embarazo', 'habla_lengua_indig', 
+                   'diabetes','epoc', 'asma', 'inmusupr', 'hipertension',
+                   'otra_com', 'cardiovascular', 'obesidad', 'renal_cronica', 
+                   'tabaquismo', 'otro_caso', 'uci']
+    rep_pos = df[binary_cols].replace({2:0, 2.0:0, 99: np.nan, 97:0, 98:0})
+    df.loc[:, binary_cols] = rep_pos
+
+    #Create dummy death variable
+    df['muertos'] = np.where(df['fecha_def'].isnull(), 0,1)
+
+    #Create dummy for hospitalized patients
+    df.loc[df['tipo_paciente'] == 1,'tipo_paciente'] = 0
+    df.loc[df['tipo_paciente'] == 2,'tipo_paciente'] = 1
+    df.rename(columns = {'tipo_paciente':'hospitalizado'},
+                          inplace=True)
+
+    
     #Create estimated recovery dummy and recovery date
     df['recovered'] = np.where((df.fecha_ingreso + pd.DateOffset(days=30) < str(dt.date.today())) & \
-                              (df.death == 0),\
-         1,0)
+                               (df.muertos == 0),\
+          1,0)
     df['fecha_rec'] = df.fecha_ingreso + pd.DateOffset(30)
     df.loc[df.recovered == 0, 'fecha_rec'] = np.nan
 
     #Save csv in directory if requested
     if filename:
-        if os.path.exists(filename):
-            os.remove(filename)
-        df.to_csv(filename)
+         if os.path.exists(filename):
+             os.remove(filename)
+         df.to_csv(filename)
     return df
 
 
