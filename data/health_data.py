@@ -4,6 +4,8 @@ from zipfile import ZipFile
 import pandas as pd
 import numpy as np
 import os
+import rarfile
+
 
 def get_ensanut():
     '''
@@ -59,28 +61,64 @@ def get_hospital_data():
     return hospitals
 
 
-def get_conapo():
+def get_conapo_state():
     '''
     Demographic data from conapo
     '''
 
     url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/ind_dem_proyecciones.csv'
     r = requests.get(url).content
-    conapo = pd.read_csv(io.StringIO(r.decode('latin-1')))
+    conapo_state = pd.read_csv(io.StringIO(r.decode('latin-1')))
     
     #Keep only population projections for 2020
-    conapo = conapo[conapo['AÑO'] == 2020]
+    conapo_state = conapo_state[conapo_state['AÑO'] == 2020]
     
     #Keep only population columns
-    conapo = conapo[['CVE_GEO','EDAD_MED']+ [col for col in conapo if col.startswith('POB')]]
+    conapo_state = conapo_state[['CVE_GEO','EDAD_MED']+ [col for col in conapo_state if col.startswith('POB')]]
 
     #Drop the national level data
-    conapo = conapo[conapo['CVE_GEO']!=0]
+    conapo_state = conapo_state[conapo_state['CVE_GEO']!=0]
 
-    return conapo
+    return conapo_state
 
 
-def get_territory():
+def get_conapo_mun():
+    '''
+    Demographic data from conapo at state level
+    '''
+
+    url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_01.rar' 
+    r = requests.get(url) 
+    rardata = rarfile.RarFile(io.BytesIO((r.content))) 
+    data_name = rardata.infolist()[0].filename 
+    rardata.extractall() 
+    mun1 = pd.read_csv(data_name, engine='python', encoding='latin1') 
+    os.remove(data_name)
+
+    url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_02.rar' 
+    r = requests.get(url) 
+    rardata = rarfile.RarFile(io.BytesIO((r.content))) 
+    data_name = rardata.infolist()[0].filename 
+    rardata.extractall() 
+    mun2 = pd.read_csv(data_name, engine='python', encoding='latin1') 
+    os.remove(data_name)
+
+    conapo_mun = mun1.append(mun2)
+    
+    #Keep only population projections for 2020
+    conapo_mun = conapo_mun[conapo_mun['AÑO'] == 2020]
+
+    conapo_mun= conapo_mun[['CLAVE', 'CLAVE_ENT', 'POB']]
+    
+    #Gen total population by municipality
+    conapo_mun.groupby('CLAVE').sum().reset_index()
+
+    conapo_mun.rename(columns = {'CLAVE': 'CVE_MUN'})
+
+    return conapo_mun
+
+
+def get_state_territory():
     '''
     Data on state territory
     '''
@@ -92,6 +130,21 @@ def get_territory():
     return territory
 
 
+def get_mun_territory():
+    '''
+    Data on municipality territory
+    '''
+
+    m_t = pd.read_csv('data/inafed_bd_2010.csv')
+    m_t.dropna(inplace=True)
+    m_t.drop(m_t[m_t.id_municipio == 0].index, inplace=True)
+    m_t['cve_inegi'] = m_t['cve_inegi'].astype(int)
+    m_t = m_t[['cve_inegi', 'superficie']]
+    m_t = m_t.rename(columns = {'cve_inegi': 'CVE_MUN'})
+
+    return m_t
+
+
 def merge_data():
     '''
     Merge all health and territory data
@@ -99,8 +152,8 @@ def merge_data():
 
     ensanut = get_ensanut()
     hospitals = get_hospital_data()
-    conapo = get_conapo()
-    territory = get_territory()
+    conapo = get_conapo_state()
+    territory = get_state_territory()
 
     # group hospital data by state
     hospitals = hospitals[hospitals.columns.difference(['Nombre Estado', 'Clave Municipio', 'Nombre Municipio'])]
@@ -115,6 +168,31 @@ def merge_data():
     data_all['Densidad_pob'] = data_all['POB_MIT_AÑO']/ data_all['Km2']
     data_all = pd.merge(data_all , agg_data_hs, on='CVE_GEO')
     data_all = pd.merge(data_all, ensanut, on='CVE_GEO')
+    
+    return data_all
+
+
+def merge_data_mun():
+    '''
+    Merge all health and territory data
+    '''
+
+    hospitals = get_hospital_data()
+    conapo = get_conapo_mun()
+    territory = get_mun_territory()
+
+    # group hospital data by state
+    hospitals['CVE_MUN'] = hospitals['Clave Municipio'] + hospitals['Clave Estado']*1000
+    hospitals = hospitals[hospitals.columns.difference(['Nombre Estado', 'Clave Estado', 'Nombre Municipio', 'Clave Municipio'])]
+    total_hosp_units = pd.DataFrame(hospitals['CVE_MUN'].value_counts())
+    agg_data_hs = hospitals.groupby('CVE_MUN').sum()
+    agg_data_hs['Total de unidades de Hospitalizacion'] = total_hosp_units
+    agg_data_hs=agg_data_hs.reset_index()
+
+    # merge
+    data_all = pd.merge(conapo, territory, on='CVE_GEO')
+    data_all['Densidad_pob'] = data_all['POB'] / data_all['superficie']
+    data_all = pd.merge(data_all , agg_data_hs, on='CVE_GEO')
     
     return data_all
 
