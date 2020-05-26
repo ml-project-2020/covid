@@ -138,4 +138,4 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
     return final_df
 
 if __name__ == "__main__":
-    daily_covid('daily_covid.csv')
+    daily_covid('../data/daily_covid.csv')
