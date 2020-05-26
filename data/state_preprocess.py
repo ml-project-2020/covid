@@ -31,9 +31,15 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
                        state_codes.ABREVIATURA))))
 
     #Subset positive cases
+    num_tests = covid_df.groupby(['entidad_um']).count().reset_index()\
+                [['entidad_um','id_registro']]
+    num_tests.columns = ['entidad_um', 'num_tests']
+
     positive_cases = covid_df.loc[covid_df['resultado']==1, :]
     positive_cases.rename(columns = {'resultado':'casos_positivos'}, 
                           inplace=True)
+    positive_cases = positive_cases.merge(num_tests, right_on='entidad_um',
+                                          left_on='entidad_um')
 
     #Bins age column
     binss = [i for i in range(0, 121, 10)]
@@ -48,7 +54,7 @@ def convert_to_state_date(frames=False, covid_df=None, state_codes=None):
     by_age.reset_index(inplace=True)
 
     to_keep = ['fecha_ingreso','entidad_um', 'casos_positivos','hospitalizado', 
-               'muertos', 'intubado','neumonia', 'edad',
+               'muertos', 'intubado','neumonia', 'edad', 'num_tests',
                'habla_lengua_indig', 'diabetes', 'epoc', 'asma', 'inmusupr', 
                'hipertension', 'otra_com','cardiovascular', 'obesidad', 
                'renal_cronica', 'tabaquismo','otro_caso', 'uci']
