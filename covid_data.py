@@ -5,6 +5,17 @@ import pandas as pd
 import os
 import numpy as np
 import datetime as dt
+   '''
+   This module is to download the most recent covid19 data from Mexico
+   and wrangle, clean and transform it to a usable data frame. It also
+   provides a function to aggregating all information to state level.
+   
+   Written by:
+   - Jessica Ramirez Toscano
+   - Oscar Noriega Villareal
+   - Stephanie Ramos Gomex
+   - Roberto Barroso Luque
+   '''
 
 DAILY_COVID_URL = 'http://187.191.75.115/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip'
 
