@@ -55,8 +55,7 @@ def daily_covid(filename=None):
 
     #Create estimated recovery dummy and recovery date
     df['recovered'] = np.where((df.fecha_ingreso + pd.DateOffset(days=30) < str(dt.date.today())) & \
-                               (df.muertos == 0),\
-          1,0)
+                               (df.muertos == 0) & (df.resultado == 1), 1,0)
     df['fecha_rec'] = df.fecha_ingreso + pd.DateOffset(30)
     df.loc[df.recovered == 0, 'fecha_rec'] = np.nan
 
