@@ -86,15 +86,16 @@ def get_conapo_mun():
     '''
     Demographic data from conapo at state level
     '''
-
+    
     url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_01.rar' 
     r = requests.get(url) 
-    rardata = rarfile.RarFile(io.BytesIO((r.content))) 
+    resp = io.BytesIO((r.content))
+    rardata = rarfile.RarFile(resp) 
     data_name = rardata.infolist()[0].filename 
     rardata.extractall() 
     mun1 = pd.read_csv(data_name, engine='python', encoding='latin1') 
     os.remove(data_name)
-
+    
     url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_02.rar' 
     r = requests.get(url) 
     rardata = rarfile.RarFile(io.BytesIO((r.content))) 
@@ -111,9 +112,9 @@ def get_conapo_mun():
     conapo_mun= conapo_mun[['CLAVE', 'CLAVE_ENT', 'POB']]
     
     #Gen total population by municipality
-    conapo_mun.groupby('CLAVE').sum().reset_index()
+    conapo_mun = conapo_mun.groupby('CLAVE').sum().reset_index()
 
-    conapo_mun.rename(columns = {'CLAVE': 'CVE_MUN'})
+    conapo_mun = conapo_mun.rename(columns = {'CLAVE': 'CVE_MUN'})
 
     return conapo_mun
 
@@ -135,7 +136,7 @@ def get_mun_territory():
     Data on municipality territory
     '''
 
-    m_t = pd.read_csv('data/inafed_bd_2010.csv')
+    m_t = pd.read_csv('data/inafed_bd_2010.csv', engine='python')
     m_t.dropna(inplace=True)
     m_t.drop(m_t[m_t.id_municipio == 0].index, inplace=True)
     m_t['cve_inegi'] = m_t['cve_inegi'].astype(int)
@@ -143,6 +144,19 @@ def get_mun_territory():
     m_t = m_t.rename(columns = {'cve_inegi': 'CVE_MUN'})
 
     return m_t
+
+def get_poverty_data():
+    '''
+    Data on poverty indicators by municipality
+    '''
+
+    url = 'https://www.coneval.org.mx/Informes/Pobreza/Datos_abiertos/pobreza_municipal/indicadores%20de%20pobreza%20municipal,%202010.csv'
+    r = requests.get(url).content
+    data = pd.read_csv(io.StringIO(r.decode('latin-1')))
+    cols = ['clave_entidad', 'CVE_MUN', 'pobreza', 'pobreza_e', 'pobreza_m', 'plb']
+    data = data.rename(columns = {'clave_municipio': 'CVE_MUN'})[cols]
+
+    return data
 
 
 def merge_data():
@@ -181,7 +195,8 @@ def merge_data_mun():
     conapo = get_conapo_mun()
     territory = get_mun_territory()
 
-    # group hospital data by state
+    # group hospital data by mun
+    print('data hospitals')
     hospitals['CVE_MUN'] = hospitals['Clave Municipio'] + hospitals['Clave Estado']*1000
     hospitals = hospitals[hospitals.columns.difference(['Nombre Estado', 'Clave Estado', 'Nombre Municipio', 'Clave Municipio'])]
     total_hosp_units = pd.DataFrame(hospitals['CVE_MUN'].value_counts())
@@ -189,10 +204,11 @@ def merge_data_mun():
     agg_data_hs['Total de unidades de Hospitalizacion'] = total_hosp_units
     agg_data_hs=agg_data_hs.reset_index()
 
+    print('merge')
     # merge
-    data_all = pd.merge(conapo, territory, on='CVE_GEO')
+    data_all = pd.merge(conapo, territory, on='CVE_MUN')
     data_all['Densidad_pob'] = data_all['POB'] / data_all['superficie']
-    data_all = pd.merge(data_all , agg_data_hs, on='CVE_GEO')
+    data_all = pd.merge(data_all , agg_data_hs, on='CVE_MUN')
     
     return data_all
 
