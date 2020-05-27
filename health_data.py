@@ -153,7 +153,7 @@ def get_poverty_data():
     url = 'https://www.coneval.org.mx/Informes/Pobreza/Datos_abiertos/pobreza_municipal/indicadores%20de%20pobreza%20municipal,%202010.csv'
     r = requests.get(url).content
     data = pd.read_csv(io.StringIO(r.decode('latin-1')))
-    cols = ['clave_entidad', 'CVE_MUN', 'pobreza', 'pobreza_e', 'pobreza_m', 'plb']
+    cols = ['entidad_federativa', 'clave_entidad', 'CVE_MUN', 'pobreza', 'pobreza_e', 'pobreza_m', 'plb']
     data = data.rename(columns = {'clave_municipio': 'CVE_MUN'})[cols]
 
     return data
