@@ -82,28 +82,35 @@ def get_conapo_state():
     return conapo_state
 
 
-def get_conapo_mun():
+def get_conapo_mun(rar=True):
     '''
     Demographic data from conapo at state level
     '''
-    
-    url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_01.rar' 
-    r = requests.get(url) 
-    resp = io.BytesIO((r.content))
-    rardata = rarfile.RarFile(resp) 
-    data_name = rardata.infolist()[0].filename 
-    rardata.extractall() 
-    mun1 = pd.read_csv(data_name, engine='python', encoding='latin1') 
-    os.remove(data_name)
-    
-    url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_02.rar' 
-    r = requests.get(url) 
-    rardata = rarfile.RarFile(io.BytesIO((r.content))) 
-    data_name = rardata.infolist()[0].filename 
-    rardata.extractall() 
-    mun2 = pd.read_csv(data_name, engine='python', encoding='latin1') 
-    os.remove(data_name)
+    if rar:
+        url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_01.rar' 
+        r = requests.get(url) 
+        resp = io.BytesIO((r.content))
+        rardata = rarfile.RarFile(resp) 
+        data_name = rardata.infolist()[0].filename 
+        rardata.extractall() 
+        mun1 = pd.read_csv(data_name, engine='python', encoding='latin1') 
+        os.remove(data_name)
+        
+        url = 'http://www.conapo.gob.mx/work/models/CONAPO/Datos_Abiertos/Proyecciones2018/base_municipios_final_datos_02.rar' 
+        r = requests.get(url) 
+        rardata = rarfile.RarFile(io.BytesIO((r.content))) 
+        data_name = rardata.infolist()[0].filename 
+        rardata.extractall() 
+        mun2 = pd.read_csv(data_name, engine='python', encoding='latin1') 
+        os.remove(data_name)
+    else:
+        zf = ZipFile('data/base_municipios_final_datos_01.csv.zip')
+        mun1 = pd.read_csv(zf.open('base_municipios_final_datos_01.csv'),
+                           encoding='latin1')
 
+        zf = ZipFile('data/base_municipios_final_datos_02.csv.zip')
+        mun2 = pd.read_csv(zf.open('base_municipios_final_datos_02.csv'),
+                           encoding='latin1')
     conapo_mun = mun1.append(mun2)
     
     #Keep only population projections for 2020
