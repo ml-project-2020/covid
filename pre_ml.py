@@ -6,9 +6,12 @@ import health_data
 import mlpipeline as pipeline
 import pandas as pd
 
-def data():
+def data(rar=True):
     '''
     Returns the final data to use in ML phase
+
+    Input:
+    - rar: boolean (set to false to avoid using rarefile)
     '''
     covid = daily_covid()
     covid_positive = covid[covid.resultado==1]
@@ -30,7 +33,7 @@ def data():
 
     #Add population density 
     mun_territory = health_data.get_mun_territory()
-    conapo_mun = health_data.get_conapo_mun()
+    conapo_mun = health_data.get_conapo_mun(rar) 
     pop_den = pd.merge(mun_territory, conapo_mun, on='CVE_MUN', how='left')
     pop_den['Densidad_pob'] = pop_den['POB'] / pop_den['superficie']
     data_model = pd.merge(data_model, pop_den[['CVE_MUN', 'POB', 'Densidad_pob']], 
