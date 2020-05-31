@@ -49,26 +49,6 @@ def normalize(train_data, test_data, features):
 
     return train, test
 
-
-def normalize(train_data, test_data, features):
-    '''
-    takes 2 datasets (testing data and trainning data) and a list of features to normalize and adds 
-    normalized new columns.
-    '''
-    
-    scaler = StandardScaler()
-    train = train_data.copy()
-    test = test_data.copy()
-    
-    normal_train = scaler.fit_transform(train[features])
-    normal_test = scaler.transform(test[features])
-    
-    for i, col in enumerate(features):
-        train.loc[:, col] = normal_train[:, i]
-        test.loc[:, col] = normal_test[:, i]
-
-    return train, test
-
 def label_encode(data_frame, cat_var):
     '''
     converts label into a numerical feture
