@@ -68,4 +68,13 @@ def data(rar=True):
     data_model['medicos'] = data_model.groupby('entidad_res')['medicos'].apply(lambda x:x.fillna(x.mean()))
     data_model['enfermeras'] = data_model.groupby('entidad_res')['enfermeras'].apply(lambda x:x.fillna(x.mean()))
 
+    # move target cols to the end of dataframe
+    hosp = data_model.pop('hospitalizado')
+    muertos = data_model.pop('muertos')
+
+    data_model['hospitalizado'] = hosp
+    data_model['muertos'] = muertos
+    data_model['covid_grave'] = data_model['hospitalizado'] + data_model['muertos']
+    data_model.loc[data_model.covid_grave==2, 'covid_grave'] = 1
+    
     return data_model
