@@ -9,7 +9,7 @@ from sklearn.svm import LinearSVC
 from sklearn.naive_bayes import GaussianNB
 from imblearn.over_sampling import SMOTE
 from sklearn.model_selection import KFold
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, plot_confusion_matrix
 
 
 def count_nan(data_frame):
@@ -181,3 +181,15 @@ def grid_search(train, features, target, models, grid):
                 best_model = model_obj
         
     return results, best_model
+
+def confusion_metrics(model, test, features, target):
+    '''
+    Plots the confusion matrix and prints the score of accuracy, precision, recall and f1 score
+    of model's performance on test data
+    '''
+    y_pred = model.predict(test[features])
+    plot_confusion_matrix(model, test[features],test[target])
+    print("Model's Accuracy on test data: {}".format(round(accuracy_score(test[target], y_pred),2)))
+    print("Model's Precision on test data: {}".format(round(precision_score(test[target], y_pred),2)))
+    print("Model's Recall on test data: {}".format(round(recall_score(test[target], y_pred),2)))
+    print("Model's F1 Score: {}".format(round(f1_score(test[target], y_pred),3)))
