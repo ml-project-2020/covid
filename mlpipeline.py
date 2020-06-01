@@ -102,9 +102,11 @@ def add_drop_cols(train, test):
     return (train, test)
 
 
+
 def upsampling(train, features, target, model, params):
     '''
-    Performs a manual manual upsampling within folds.
+    Performs a manual over-sampling using Synthetic Minority Over-sampling 
+    (SMOTE) during 10-Cross Validation.
     Inputs:
         train: training dataframe
         test: testing dataframe
@@ -129,11 +131,14 @@ def upsampling(train, features, target, model, params):
         X_val_fold, y_val_fold = X.iloc[val_fold_index], y.iloc[val_fold_index]
         # Upsample only the data in the training section
         X_train_fold_upsample, y_train_fold_upsample = smoter.fit_resample(X_train_fold,
-                                                                           y_train_fold)
+                                                                           y_train_fold.values.ravel())
+        X_train_fold_upsample = pd.DataFrame(data=X_train_fold_upsample, 
+                                             columns=features)
         # Fit the model on the upsampled training data
         model_obj = model 
         model_obj.set_params(**params)
-        model_obj.fit(X_train_fold_upsample.values, y_train_fold_upsample.values.ravel())
+        model_obj.fit(X_train_fold_upsample, 
+                      y_train_fold_upsample.ravel())
         # Score the model on the (non-upsampled) validation data
         pred = model_obj.predict(X_val_fold)
         r = recall_score(y_val_fold, pred)
@@ -143,8 +148,8 @@ def upsampling(train, features, target, model, params):
         precision.append(p)
         recall.append(r)
         accuracy.append(a)
-    r_mean = np.array(precision).mean()
-    p_mean = np.array(recall).mean()
+    p_mean = np.array(precision).mean()
+    r_mean = np.array(recall).mean()
     a_mean = np.array(accuracy).mean()
         
     return (model_obj, p_mean, a_mean, r_mean)
@@ -154,13 +159,15 @@ def grid_search(train, features, target, models, grid):
     Loops through the parameters in the grid and finds the best model
     Inputs:
         train: training dataframe
-        test: testing dataframe
+        features: list of strings for features to be used in train_df
+        target: list of strings with outcome variable
         models: dictionary specifying the models
-        gris: dictionary specifying the parameters for each model
+        grid: dictionary specifying the parameters for each model
     Output:
-        Returns a table summarizing each of the model specifications and its F1 
-        and accuracy score and the best model defined as the model with higher 
-        accuracy score.
+        Returns a table summarizing each of the model specifications and its 
+        recall, precission, accuracy score.
+        The best model defined as the model with highest 
+        recall score is also returned.
     '''
 
     cols = ['params', 'precision', 'accuracy', 'recall']
@@ -172,15 +179,19 @@ def grid_search(train, features, target, models, grid):
 
         for params in grid[model_key]:
             print("Training model:", model_key, "|", params)
-            model_obj, p, a, r = upsampling(train, features, target, models[model_key], params)
-            new_row = {'params': params, 'precision': p, 'accuracy': a, 'recall': r}
+            model_obj, p, a, r = upsampling(train, features, target,
+                                            models[model_key], params)
+            new_row = {'params': params, 'accuracy': a,
+                      'precision': p, 'recall': r}
             results = results.append(new_row, ignore_index=True)
             
+            #Update best model if recall is better
             if r > best_score:
                 best_score = r
                 best_model = model_obj
         
     return results, best_model
+
 
 def confusion_metrics(model, test, features, target):
     '''
