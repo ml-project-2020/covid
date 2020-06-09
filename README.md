@@ -35,6 +35,7 @@ sklearn
 ```
 
 ## Data Collection and Processing
+All the data used in this project is stored in the **data** folder.
 To get daily updated data, we wrote:  
 * **covid_data.py**  
 This module serves to download the most recent COVID-19 data from Mexico. The data is wrangled, cleaned, and transformed into a usable data frame. It also provides a function to aggregating all information to state level.  
@@ -64,10 +65,11 @@ For each model, we provide a notebook that includes the cross-validation approac
 * **Logistic Regression.ipynb**
 * **Naive_Bayes.ipynb**
 * **SVM DecisionTrees.ipynb**
-* **Random Forest Model.ipynb** *Includes additional visualizations about the model's performance in each state of Mexico*
+* **Random Forest Model.ipynb**  
+   *Includes additional visualizations about the model's performance in each state of Mexico*
 
-Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest Model* and *Linear Support Vector Machines* to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
+Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Linear Support Vector Machines* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
 * See **Relative Risk.ipynb**
 
 ## Final Report and Results
-The overall analysis of this project is written in *Final_report.pdf*.
+The overall analysis of this project is documented in *Final_report.pdf*.
