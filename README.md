@@ -2,10 +2,10 @@
 # COVID-19 in Mexico: Identifying health and socioeconomic variables for covid-19 death and hospitalization prediction
 
 Team Members:  
--Roberto Barroso-Luque (barrosoluquer)  
--Luz Stephanie Ramos Gomez (stephanieramos)  
--Oscar Enrique Noriega Villarreal (onoriega)  
--Jesica Maria Ramirez Toscano (jramireztoscano)  
+* Roberto Barroso-Luque (barrosoluquer)  
+* Luz Stephanie Ramos Gomez (stephanieramos)  
+* Oscar Enrique Noriega Villarreal (onoriega)  
+* Jesica Maria Ramirez Toscano (jramireztoscano)  
 
 ## Table of contents
 * [Motivation and Brief Summary](#motivation-and-brief-summary)
@@ -36,19 +36,32 @@ sklearn
 
 ## Data Collection and Processing
 To get daily updated data, we wroted:  
-* **covid_data.py** 
-This module is to download the most recent COVID-19 data from Mexico
-and wrangle, clean and transform it to a usable data frame. It also
-provides a function to aggregating all information to state level.
-    ```daily_covid()``` returns a dataframe in which each row represents an individual tested for COVID-19
-    ```convert_to_state_date()```
-If you run the following, a csv file with daily COVID-19 individual cases will be downloaded in the data folder.
+* **covid_data.py**  
+This module is to download the most recent COVID-19 data from Mexico. It is wrangled, cleaned and transformed to a usable data frame. It also provides a function to aggregating all information to state level.  
+    ```daily_covid()``` returns a dataframe in which each row represents an individual tested for COVID-19  
+    ```convert_to_state_date()```converts covid individual level data to counts by state and date  
+If you run the following, a csv file with daily COVID-19 individual cases will be downloaded to the data folder.
 ```
 $ python3 covid_data.py
 ```
+* **health_data.py**  
+This module obtains data from ENSANUT, CONAPO and Health Ministry at municipality and state levels.  
+
+
+
+* **pre_ml.py**  
 
 
 ## Notebooks Structure
+**mlpipiline.py**
+
+### Cross-Validation and Testing
+**Logistic Regression.ipynb**
+**Naive_Bayer.ipynb**
+**SVM DecisionTrees.ipynb**
+**Random Forest Model.ipynb**
+
+### Risk Index on Predictions
 
 ## Final Report and Results
 
