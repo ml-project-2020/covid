@@ -8,11 +8,11 @@ Team Members:
 -Jesica Maria Ramirez Toscano (jramireztoscano)  
 
 ## Table of contents
-* [Motivation and Brief Summary](#general-info)
+* [Motivation and Brief Summary](#motivation-and-brief-summary)
 * [Setup](#setup)
-* [Data Collection and Processing](#data-collection)
+* [Data Collection and Processing](#data-collection-and-processing)
 * [Notebooks Structure](#notebooks-structure)
-* [Final Report and Results](#results)
+* [Final Report and Results](#final-report-and-results)
 
 
 ## Motivation and Brief Summary
@@ -35,10 +35,20 @@ sklearn
 ```
 
 ## Data Collection and Processing
-To get daily updated data, we wroted: covid_data.py
+To get daily updated data, we wroted:  
+* **covid_data.py** 
+This module is to download the most recent COVID-19 data from Mexico
+and wrangle, clean and transform it to a usable data frame. It also
+provides a function to aggregating all information to state level.
+    ```daily_covid()``` returns a dataframe in which each row represents an individual tested for COVID-19
+    ```convert_to_state_date()```
 If you run the following, a csv file with daily COVID-19 individual cases will be downloaded in the data folder.
+```
+$ python3 covid_data.py
+```
 
 
 ## Notebooks Structure
 
 ## Final Report and Results
+
