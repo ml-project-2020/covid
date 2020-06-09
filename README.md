@@ -52,7 +52,7 @@ Particularly, with the mentioned data sources, we obtain:
    * Percentage of people living in poverty from CONEVAL
    * Demographic data (population density) from CONAPO
 
-Calling the ```merge_data_mun()`` function returns a merged data frame in which each row represents a municipality.
+Calling the ```merge_data_mun()``` function returns a merged data frame in which each row represents a municipality.
 
 * **pre_ml.py**  
 This model merges individual COVID-19 data with health municipality level data. 
