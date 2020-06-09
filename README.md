@@ -1,4 +1,5 @@
-# ML course Project: COVID-19 in Mexico: Identifying vulnerable areas with an ML approach.
+# ML course Project
+# COVID-19 in Mexico: Identifying health and socioeconomic variables for covid-19 death and hospitalization prediction
 
 Team Members:  
 -Roberto Barroso-Luque (barrosoluquer)  
@@ -7,5 +8,24 @@ Team Members:
 -Jesica Maria Ramirez Toscano (jramireztoscano)  
 
 
-## Motivation
-The current pandemic caused by the SARS-CoV-2 virus represents an unprecedented challenge to the global economy. Herculean efforts have been made to analyze, predict, and model the socioeconomic impacts of the pandemic to guide relevant policy. However, the majority of this analysis has revolved around just a handful of countries. In particular the USA, China, Italy, Spain, UK, Germany, South Korea, Taiwan, and Singapore . Some characteristics of virus spread and its socioeconomic impacts are most probably shared among a majority of countries. Nonetheless, in order to provide data-driven policy advice to individual countries, analysis and modeling should be done on national-level data. With under-funded healthcare systems2, institutional-weakness, and large informal economic sectors, Mexico faces a gigantic challenge to contain the virus. Unfortunately, like many other developing countries3, there is a dearth of analysis with respect to Mexico. With this project, we hope to shed some light on the public health crises currently unfolding in and, more importantly, provide data-driven policy recommendations to combat the pandemic. **Ultimately we seek to develop a covid19 vulnerability index based on health, economic, and disease transmission data at the municipality level**.
+## Motivation and Brief Summary
+The current pandemic caused by the SARS-CoV-2 virus represents an unprecedented challenge to the global economy. As of June 2020, about 7 million people have tested positive and more than 400,000 have died as a result of the virus.  In order to provide data-driven policy advice to individual countries analysis and modeling should be done on national-level data.  With under-funded healthcare systems, institutional-weakness, and large informal economic sectors, Mexico faces a gigantic challenge to contain the virus. We developed classification algorithms to predict death and hospitalization among individuals who tested positive for the virus in Mexican soil using a mix of health and socioeconomic variables at the individual and municipality levels. Using ten-fold cross-validation and synthetic minority over-sampling linear support vectors, logistic regression, decision trees, and random forest models were trained to predict patient outcomes (survival vs death and hospitalization vs home recovery).
+
+## Getting Started
+If you want to replicate the presented analysis, some modules must be installed. Particularly, the following:
+```
+pandas
+geopandas
+numpy
+matplotlib
+seaborn
+mpl_toolkits
+requests
+zipfile
+rarfile
+imblearn
+sklearn
+```
+
+## Data Collection and Processing
+
