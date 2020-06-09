@@ -1,5 +1,5 @@
 # ML course Project
-# COVID-19 in Mexico: Identifying health and socioeconomic variables for covid-19 death and hospitalization prediction
+# COVID-19 in Mexico: Identifying health and socioeconomic variables for COVID-19 death and hospitalization prediction
 
 Team Members:  
 * Roberto Barroso-Luque (barrosoluquer)  
@@ -35,33 +35,39 @@ sklearn
 ```
 
 ## Data Collection and Processing
-To get daily updated data, we wroted:  
+To get daily updated data, we wrote:  
 * **covid_data.py**  
-This module is to download the most recent COVID-19 data from Mexico. It is wrangled, cleaned and transformed to a usable data frame. It also provides a function to aggregating all information to state level.  
-    ```daily_covid()``` returns a dataframe in which each row represents an individual tested for COVID-19  
-    ```convert_to_state_date()```converts covid individual level data to counts by state and date  
+This module serves to download the most recent COVID-19 data from Mexico. The data is wrangled, cleaned, and transformed into a usable data frame. It also provides a function to aggregating all information to state level.  
+   * ```daily_covid()``` returns a pandas dataframe in which each row represents an individual tested for COVID-19
+   * ```convert_to_state_date()```converts COVID individual level data to counts by state and date  
 If you run the following, a csv file with daily COVID-19 individual cases will be downloaded to the data folder.
 ```
 $ python3 covid_data.py
 ```
 * **health_data.py**  
-This module obtains data from ENSANUT, CONAPO and Health Ministry at municipality and state levels.  
+This module obtains data from ENSANUT, CONAPO, CONEVAL, and the Health Ministry at municipality and state levels.
+Particularly, with the mentioned data sources, we obtain: 
+   * The number of hospital beds, doctors, and nurses from the Health Resources Data provided by the Secretary of Health.
+   * Percentage of people living in poverty from CONEVAL
+   * Demographic data (population density) from CONAPO
 
-
+Calling the ```merge_data_mun()`` function returns a merged data frame in which each row represents a municipality.
 
 * **pre_ml.py**  
+This model merges individual COVID-19 data with health municipality level data. 
+It is the final processing of data before applying several techniques of sampling and machine learning models.
 
 
 ## Notebooks Structure
-**mlpipiline.py**
+To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, linear support vector machines, decision trees, and random forest models. 
+For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations.  
+* **Logistic Regression.ipynb**
+* **Naive_Bayes.ipynb**
+* **SVM DecisionTrees.ipynb**
+* **Random Forest Model.ipynb** *Includes additional visualizations about the model's performance in each state of Mexico*
 
-### Cross-Validation and Testing
-**Logistic Regression.ipynb**
-**Naive_Bayer.ipynb**
-**SVM DecisionTrees.ipynb**
-**Random Forest Model.ipynb**
-
-### Risk Index on Predictions
+Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest Model* and *Linear Support Vector Machines* to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
+* See **Relative Risk.ipynb**
 
 ## Final Report and Results
-
+The overall analysis of this project is written in *Final_report.pdf*.
