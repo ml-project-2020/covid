@@ -72,4 +72,4 @@ Finally, to assess the relative risk of each state, we used the predicted values
 * See **Relative Risk.ipynb**
 
 ## Final Report and Results
-The overall analysis of this project is documented in *Final_report.pdf*.
+The overall analysis of this project is documented in **Final_report.pdf**.
