@@ -60,7 +60,7 @@ It is the final processing of data before applying several techniques of samplin
 
 
 ## Notebooks Structure
-To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, linear support vector machines, decision trees, and random forest models. 
+To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, linear support vector classification, decision trees, and random forest models. 
 For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations.  
 * **Logistic Regression.ipynb**
 * **Naive_Bayes.ipynb**
@@ -68,7 +68,7 @@ For each model, we provide a notebook that includes the cross-validation approac
 * **Random Forest Model.ipynb**  
    *Includes additional visualizations about the model's performance in each state of Mexico*
 
-Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Linear Support Vector Machines* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
+Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Linear Support Vector Classification* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
 * See **Relative Risk.ipynb**
 
 ## Final Report and Results
