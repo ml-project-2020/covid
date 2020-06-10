@@ -12,7 +12,7 @@ Team Members:
 * [Setup](#setup)
 * [Data Collection and Processing](#data-collection-and-processing)
 * [Notebooks Structure](#notebooks-structure)
-* [Final Report and Results](#final-report-and-results)
+* [Final Report and Acknowledgements](#final-report-and-acknowledgements)
 
 
 ## Motivation and Brief Summary
@@ -61,8 +61,7 @@ It is the final processing of data before applying several techniques of samplin
 
 
 ## Notebooks Structure
-To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. 
-For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations. In these notebooks, we also used a custom module **mlpipeline.py** to split, normalize, impute values of the data, apply SMOTE in the learning process, and get the metrics of predicted values.  
+To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. In these notebooks, we also used a custom module **mlpipeline.py** to split, normalize, impute values of the data, apply SMOTE in the learning process, and get the metrics of predicted values. For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations:  
 * **Logistic Regression.ipynb**
 * **Naive_Bayes.ipynb**
 * **SVM DecisionTrees.ipynb**
@@ -72,5 +71,10 @@ For each model, we provide a notebook that includes the cross-validation approac
 Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Support Vector Machine* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
 * See **Relative Risk.ipynb**
 
-## Final Report and Results
-The overall analysis and results of this project are documented in **ML_paper.pdf**.
+## Final Report and Acknowledgements
+The overall analysis and results of this project are documented in **ML_paper.pdf**.  
+
+The CAPP 30254 - Spring 2020 Machine Learning for Public Policy Course motivated this project.
+We want to thank professor *Nick Feamster* and the Teaching Assistants: Felipe Alamos, Erika Tyagi, Jonathan Tan, Tammy Glazer, and Alec Macmillen for their great support and comments.  :blush:
+
+**Any error is ours.**
