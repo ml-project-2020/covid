@@ -75,6 +75,6 @@ Finally, to assess the relative risk of each state, we used the predicted values
 The overall analysis and results of this project are documented in **ML_paper.pdf**.  
 
 The CAPP 30254 - Spring 2020 Machine Learning for Public Policy Course motivated this project.
-We want to thank professor *Nick Feamster* and the Teaching Assistants: Felipe Alamos, Erika Tyagi, Jonathan Tan, Tammy Glazer, and Alec Macmillen for their great support and comments.  :blush:
+We want to thank professor **Nick Feamster** and the Teaching Assistants: Felipe Alamos, Erika Tyagi, Jonathan Tan, Tammy Glazer, and Alec Macmillen for their great support and comments.  :blush:
 
-**Any error is ours.**
+**All errors are ours.**
