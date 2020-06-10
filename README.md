@@ -16,7 +16,7 @@ Team Members:
 
 
 ## Motivation and Brief Summary
-The current pandemic caused by the SARS-CoV-2 virus represents an unprecedented challenge to the global economy. As of June 2020, about 7 million people have tested positive and more than 400,000 have died as a result of the virus.  In order to provide data-driven policy advice to individual countries analysis and modeling should be done on national-level data.  With under-funded healthcare systems, institutional-weakness, and large informal economic sectors, Mexico faces a gigantic challenge to contain the virus. We developed classification algorithms to predict death and hospitalization among individuals who tested positive for the virus in Mexican soil using a mix of health and socioeconomic variables at the individual and municipality levels. Using ten-fold cross-validation and synthetic minority over-sampling linear support vectors, logistic regression, decision trees, and random forest models were trained to predict patient outcomes (survival vs death and hospitalization vs home recovery).
+The current pandemic caused by the SARS-CoV-2 virus represents an unprecedented challenge to the global economy. As of June 2020, about 7 million people have tested positive and more than 400,000 have died as a result of the virus.  In order to provide data-driven policy advice to individual countries analysis and modeling should be done on national-level data.  With under-funded healthcare systems, institutional-weakness, and large informal economic sectors, Mexico faces a gigantic challenge to contain the virus. We developed classification algorithms to predict death and hospitalization among individuals who tested positive for the virus in Mexican soil using a mix of health and socioeconomic variables at the individual and municipality levels. Using ten-fold cross-validation and synthetic minority over-sampling support vector machine, logistic regression, decision trees, and random forest models were trained to predict patient outcomes (survival vs death and hospitalization vs home recovery).
 
 ## Setup
 If you want to replicate the presented analysis, some modules must be installed. Particularly, the following:
@@ -60,7 +60,7 @@ It is the final processing of data before applying several techniques of samplin
 
 
 ## Notebooks Structure
-To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, linear support vector classification, decision trees, and random forest models. 
+To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. 
 For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations.  
 * **Logistic Regression.ipynb**
 * **Naive_Bayes.ipynb**
@@ -68,8 +68,8 @@ For each model, we provide a notebook that includes the cross-validation approac
 * **Random Forest Model.ipynb**  
    *Includes additional visualizations about the model's performance in each state of Mexico*
 
-Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Linear Support Vector Classification* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
+Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Support Vector Machine* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
 * See **Relative Risk.ipynb**
 
 ## Final Report and Results
-The overall analysis of this project is documented in **Final_report.pdf**.
+The overall analysis and results of this project are documented in **ML_paper.pdf**.
