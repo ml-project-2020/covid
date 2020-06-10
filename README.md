@@ -40,7 +40,8 @@ To get daily updated data, we wrote:
 * **covid_data.py**  
 This module serves to download the most recent COVID-19 data from Mexico. The data is wrangled, cleaned, and transformed into a usable data frame. It also provides a function to aggregating all information to state level.  
    * ```daily_covid()``` returns a pandas dataframe in which each row represents an individual tested for COVID-19
-   * ```convert_to_state_date()```converts COVID individual level data to counts by state and date  
+   * ```convert_to_state_date()```converts COVID individual level data to counts by state and date
+  
 If you run the following, a csv file with daily COVID-19 individual cases will be downloaded to the data folder.
 ```
 $ python3 covid_data.py
@@ -61,7 +62,7 @@ It is the final processing of data before applying several techniques of samplin
 
 ## Notebooks Structure
 To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. 
-For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations.  
+For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations. In these notebooks, we also used a custom module **mlpipeline.py** to split, normalize, impute values of the data, apply SMOTE in the learning process, and get the metrics of predicted values.  
 * **Logistic Regression.ipynb**
 * **Naive_Bayes.ipynb**
 * **SVM DecisionTrees.ipynb**
