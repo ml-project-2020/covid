@@ -1,6 +1,8 @@
 # ML course Project
 # COVID-19 in Mexico: Predicting severe disease outcomes using health and socioeconomic variables.
 
+*"AI applications present opportunities for the future of healthcare and can be harnessed at this time, as clinicians take on the complexities of responding to COVID-19" Xiangao Jiang et al(2020)*
+
 Team Members:  
 * Roberto Barroso-Luque (barrosoluquer)  
 * Luz Stephanie Ramos Gomez (stephanieramos)  
