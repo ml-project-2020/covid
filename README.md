@@ -35,9 +35,9 @@ sklearn
 ```
 
 ## Data Collection and Processing
-All the data used in this project is stored in the **data** folder.
+All the data used in this project is stored in the [**data**](data) folder.
 To get daily updated data, we wrote:  
-* **covid_data.py**  
+* [**covid_data.py**](covid_data.py)  
 This module serves to download the most recent COVID-19 data from Mexico. The data is wrangled, cleaned, and transformed into a usable data frame. It also provides a function to aggregating all information to state level.  
    * ```daily_covid()``` returns a pandas dataframe in which each row represents an individual tested for COVID-19
    * ```convert_to_state_date()```converts COVID individual level data to counts by state and date
@@ -46,7 +46,7 @@ If you run the following, a csv file with daily COVID-19 individual cases will b
 ```
 $ python3 covid_data.py
 ```
-* **health_data.py**  
+* [**health_data.py**](health_data.py)  
 This module obtains data from ENSANUT, CONAPO, CONEVAL, and the Health Ministry at municipality and state levels.
 Particularly, with the mentioned data sources, we obtain: 
    * The number of hospital beds, doctors, and nurses from the Health Resources Data provided by the Secretary of Health.
@@ -55,24 +55,24 @@ Particularly, with the mentioned data sources, we obtain:
 
 Calling the ```merge_data_mun()``` function returns a merged data frame in which each row represents a municipality.
 
-* **pre_ml.py**  
+* [**pre_ml.py**](pre_ml.py)  
 This model merges individual COVID-19 data with health municipality level data. 
 It is the final processing of data before applying several techniques of sampling and machine learning models.
 
 
 ## Notebooks Structure
-To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. In these notebooks, we also used a custom module **mlpipeline.py** to split, normalize, impute values of the data, apply SMOTE in the learning process, and get the metrics of predicted values. For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations:  
-* **Logistic Regression.ipynb**
-* **Naive_Bayes.ipynb**
-* **SVM DecisionTrees.ipynb**
-* **Random Forest Model.ipynb**  
+To predict death and hospitalizations, we used several ML classifications models. Particularly, we applied: logistic regression, naive Bayes, support vector machine, decision trees, and random forest models. In these notebooks, we also used a custom module [**mlpipeline.py**](mlpipeline.py) to split, normalize, impute values of the data, apply SMOTE in the learning process, and get the metrics of predicted values. For each model, we provide a notebook that includes the cross-validation approach we used (with imbalanced sample techniques), testing results of the model, and feature importance visualizations:  
+* [**Logistic Regression.ipynb**](Logistic%20Regression.ipynb)
+* [**Naive_Bayes.ipynb**](Naive_bayes.ipynb)
+* [**SVM DecisionTrees.ipynb**](SVM%20DecisionTrees.ipynb)
+* [**Random Forest Model.ipynb**](Random%20Forest%20Model.ipynb)  
    *Includes additional visualizations about the model's performance in each state of Mexico*
 
 Finally, to assess the relative risk of each state, we used the predicted values of the *Balanced Random Forest* and *Support Vector Machine* models to construct a simple risk index on COVID death and hospitalizations to compare the risk between states.  
-* See **Relative Risk.ipynb**
+* See [**Relative Risk.ipynb**](Relative%20Risk.ipynb)
 
 ## Final Report and Acknowledgements
-The overall analysis and results of this project are documented in **ML_paper.pdf**.  
+The overall analysis and results of this project are documented in [**ML_paper.pdf**](ML_paper.pdf).
 
 The CAPP 30254 - Spring 2020 Machine Learning for Public Policy Course motivated this project.
 We want to thank professor **Nick Feamster** and the Teaching Assistants: Felipe Alamos, Erika Tyagi, Jonathan Tan, Tammy Glazer, and Alec Macmillen for their great support and comments.  :blush:
