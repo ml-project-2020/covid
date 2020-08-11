@@ -17,7 +17,7 @@ import os
 import numpy as np
 import datetime as dt
 
-DAILY_COVID_URL = 'http://epidemiologia.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip'
+DAILY_COVID_URL = 'http://datosabiertos.salud.gob.mx/gobmx/salud/datos_abiertos/datos_abiertos_covid19.zip'
 
 def daily_covid(filename=None):
     '''
